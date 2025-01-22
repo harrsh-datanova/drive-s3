@@ -22,10 +22,18 @@ const getEnv = (
     return value;
 };
 
+export const port = getEnv("PORT", {
+    defaultValue: "8080",
+});
+
+export const mongoUri = getEnv("MONGO_URI");
+
 export const clientId = getEnv("GOOGLE_CLIENT_ID");
 export const clientSecret = getEnv("GOOGLE_CLIENT_SECRET");
 export const redirectUri = getEnv("GOOGLE_REDIRECT_URI");
 export const scopes = getEnv("GOOGLE_SCOPES");
-export const port = getEnv("PORT", {
-    defaultValue: "8080",
-});
+
+export const awsRegion = getEnv("AWS_REGION");
+export const awsAccessKey = getEnv("AWS_ACCESS_KEY");
+export const awsSecretKey = getEnv("AWS_SECRET_KEY");
+export const awsBucket = getEnv("AWS_BUCKET");
