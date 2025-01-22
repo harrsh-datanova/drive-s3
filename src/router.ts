@@ -7,10 +7,10 @@ import PingController from "./controllers/ping";
 
 const router = Router();
 
-router.get("/", PingController);
+router.get("/ping", PingController);
 router.get("/connect", ConnectController);
-router.get("/oauth2callback", OAuthCallbackController);
+router.get("/oauth-callback", OAuthCallbackController);
 router.get("/folders", GetFoldersController);
-router.get("/sub-folders/:folderName", GetSubFoldersController);
+router.get("/folders/:folderName", GetSubFoldersController);
 
 export default router;

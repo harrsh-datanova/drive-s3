@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 
 const PingController = async (req: Request, res: Response) => {
     try {

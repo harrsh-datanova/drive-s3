@@ -5,31 +5,38 @@ import User from "../models/User";
 const OAuthCallbackController = async (req: Request, res: Response) => {
     try {
         const code = req.query.code as string;
-
         if (!code) {
             throw new Error("Authorization code not provided.");
         }
 
-        console.log(code);
-
         const { tokens } = await oauth2Client.getToken(code);
-        console.log("Received tokens:", tokens);
+        if (!tokens.access_token) {
+            throw new Error("Access token not found.");
+        }
+
+        const { email } = await oauth2Client.getTokenInfo(tokens.access_token);
+        if (!email) {
+            throw new Error("User not found.");
+        }
 
         const existingUser = await User.findOne({
-            userId: code,
+            userId: email,
         });
 
         if (existingUser) {
             await User.updateOne(
                 {
-                    userId: code,
+                    userId: email,
                 },
                 {
-                    tokens,
+                    tokens: {
+                        ...existingUser.tokens,
+                        ...tokens,
+                    },
                 }
             );
 
-            res.cookie("userId", code, {
+            res.cookie("userId", existingUser._id, {
                 maxAge: 1000 * 60 * 60 * 24 * 30,
                 httpOnly: true,
             });
@@ -41,12 +48,12 @@ const OAuthCallbackController = async (req: Request, res: Response) => {
         }
 
         const newUser = new User({
-            userId: code,
+            userId: email,
             tokens,
         });
         await newUser.save();
 
-        res.cookie("userId", code, {
+        res.cookie("userId", newUser._id, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
         });

@@ -1,23 +1,10 @@
 import { Request, Response } from "express";
 import { google } from "googleapis";
-import oauth2Client from "../libs/auth";
-import User from "../models/User";
+import setOAuthCredentials from "../utils/setOAuthCredentials";
 
 const GetSubFoldersController = async (req: Request, res: Response) => {
     try {
-        const userId = req.cookies.userId;
-        if (!userId) {
-            throw new Error("User not found.");
-        }
-
-        const tokens = await User.findOne({
-            userId,
-        });
-        if (!tokens) {
-            throw new Error("User not found.");
-        }
-
-        oauth2Client.setCredentials(tokens.tokens);
+        const oauth2Client = await setOAuthCredentials(req);
 
         const folderName = req.params.folderName;
         const drive = google.drive({

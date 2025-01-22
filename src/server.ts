@@ -13,7 +13,7 @@ const app: Application = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use(router);
+app.use("/api/v1", router);
 
 app.listen(port, async () => {
     await connectDB();
