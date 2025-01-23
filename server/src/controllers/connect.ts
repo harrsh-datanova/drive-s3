@@ -7,7 +7,6 @@ const ConnectController = (req: Request, res: Response) => {
         const authUrl = oauth2Client.generateAuthUrl({
             access_type: "offline",
             scope: JSON.parse(scopes),
-            prompt: "consent",
         });
         res.json({
             authUrl,

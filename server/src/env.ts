@@ -26,6 +26,8 @@ export const port = getEnv("PORT", {
     defaultValue: "8080",
 });
 
+export const websiteUrl = getEnv("WEBSITE_URL");
+
 export const mongoUri = getEnv("MONGO_URI");
 
 export const clientId = getEnv("GOOGLE_CLIENT_ID");

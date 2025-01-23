@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { websiteUrl } from "../env";
 import oauth2Client from "../libs/auth";
 import User from "../models/User";
 
@@ -41,9 +42,7 @@ const OAuthCallbackController = async (req: Request, res: Response) => {
                 httpOnly: true,
             });
 
-            res.json({
-                message: "User already exists. Updated tokens.",
-            });
+            res.redirect(websiteUrl);
             return;
         }
 
@@ -58,9 +57,7 @@ const OAuthCallbackController = async (req: Request, res: Response) => {
             httpOnly: true,
         });
 
-        res.json({
-            message: "User created.",
-        });
+        res.redirect(websiteUrl);
     } catch (error) {
         console.error(error);
 

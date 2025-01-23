@@ -1,14 +1,19 @@
 {
-  "name": "drive-s3",
-  "version": "1.0.0",
-  "main": "app/server.ts",
-  "scripts": {
-    "client": "npm run dev --prefix ./client",
-    "server": "npm run dev --prefix ./server",
-    "dev": "concurrently \"npm run dev --prefix ./client\" \"npm run dev --prefix ./server\""
-  },
-  "license": "MIT",
-  "dependencies": {
-    "concurrently": "^9.1.2"
-  }
+    "name": "drive-s3",
+    "version": "1.0.0",
+    "main": "app/server.ts",
+    "scripts": {
+        "client": "npm run dev --prefix ./client",
+        "server": "npm run dev --prefix ./server",
+        "dev": "concurrently \"npm run dev --prefix ./client\" \"npm run dev --prefix ./server\"",
+        "format": "prettier --check \"./**/*.{ts,tsx,js,jsx,json,md}\"",
+        "format:fix": "prettier --write \"./**/*.{ts,tsx,js,jsx,json,md}\""
+    },
+    "license": "MIT",
+    "dependencies": {
+        "concurrently": "^9.1.2"
+    },
+    "devDependencies": {
+        "prettier": "^3.4.2"
+    }
 }

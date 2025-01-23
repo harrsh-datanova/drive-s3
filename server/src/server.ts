@@ -1,5 +1,6 @@
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import dotenv from "dotenv";
 import express, { Application } from "express";
 import connectDB from "./db";
@@ -12,6 +13,11 @@ const app: Application = express();
 
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(
+    cors({
+        credentials: true,
+    })
+);
 
 app.use("/api/v1", router);
 
