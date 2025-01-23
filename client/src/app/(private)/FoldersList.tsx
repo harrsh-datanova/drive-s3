@@ -4,11 +4,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
 import RightArrow from "./RightArrow";
+import axios from "@/utils/axios";
+import PageLoader from "./PageLoader";
 
 const FoldersList = ({ folders, folderPath }: IFoldersListProps) => {
     const router = useRouter();
 
     const [selectedFolders, setSelectedFolders] = useState<IFolder[]>([]);
+    const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleFolderSelection = (folder: IFolder) => {
         if (selectedFolders.includes(folder)) {
@@ -20,8 +24,29 @@ const FoldersList = ({ folders, folderPath }: IFoldersListProps) => {
         }
     };
 
+    const handleUploadFiles = async () => {
+        try {
+            setIsLoading(true);
+
+            const folderIds = selectedFolders.map((folder) => folder.id);
+            const uploadedFilesResponse = await axios.post("/upload-files", {
+                folderIds,
+            });
+
+            setUploadedFiles(uploadedFilesResponse.data.files);
+            setSelectedFolders([]);
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred while uploading files.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="container mx-auto">
+            {isLoading ? <PageLoader /> : null}
+
             {folderPath &&
                 folderPath.map((folder, index) => (
                     <span key={index}>
@@ -82,16 +107,42 @@ const FoldersList = ({ folders, folderPath }: IFoldersListProps) => {
                         })}
                     </ul>
 
-                    <p>
-                        Selected folders:{" "}
-                        {selectedFolders
-                            .map((folder) => folder.name)
-                            .join(", ")}
-                    </p>
+                    {selectedFolders.length ? (
+                        <Fragment>
+                            <p className="mt-4">
+                                Selected folders:{" "}
+                                {selectedFolders
+                                    .map((folder) => folder.name)
+                                    .join(", ")}
+                            </p>
+                            <button
+                                className="rounded-md px-4 py-1 text-white bg-blue-600 "
+                                onClick={handleUploadFiles}
+                            >
+                                Download files
+                            </button>
+                        </Fragment>
+                    ) : null}
                 </Fragment>
             ) : (
                 <p>No folders found</p>
             )}
+
+            {uploadedFiles.length ? (
+                <Fragment>
+                    <h2 className="mt-4">Uploaded files</h2>
+
+                    <ul>
+                        {uploadedFiles.map((file, index) => (
+                            <li key={index} className="list-disc ml-4">
+                                <a href={file} target="_blank" rel="noreferrer">
+                                    {file.split("/").pop()}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </Fragment>
+            ) : null}
         </div>
     );
 };

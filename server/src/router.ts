@@ -15,6 +15,6 @@ router.get("/connect", ConnectController);
 router.get("/oauth-callback", OAuthCallbackController);
 router.get("/folders", GetFoldersController);
 router.get("/folders/:folderName", GetSubFoldersController);
-router.get("/upload-files/:folderId", UploadFilesController);
+router.post("/upload-files", UploadFilesController);
 
 export default router;

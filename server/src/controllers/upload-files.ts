@@ -10,7 +10,17 @@ const UploadFilesController = async (req: Request, res: Response) => {
         const oauth2Client = await setOAuthCredentials(req);
         const userId = req.cookies.userId;
 
-        const folderId = req.params.folderId;
+        const folderIds = req.body.folderIds;
+        if (!folderIds || !Array.isArray(folderIds)) {
+            res.status(400).json({
+                message: "Invalid request.",
+            });
+            return;
+        }
+
+        const folderQuery = folderIds
+            .map((id) => `'${id}' in parents`)
+            .join(" or ");
 
         const drive: drive_v3.Drive = google.drive({
             version: "v3",
@@ -18,7 +28,7 @@ const UploadFilesController = async (req: Request, res: Response) => {
         });
 
         const listResponse = await drive.files.list({
-            q: `'${folderId}' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false`,
+            q: `(${folderQuery}) and mimeType != 'application/vnd.google-apps.folder' and trashed = false`,
             fields: "files(id, name)",
         });
 
@@ -31,7 +41,8 @@ const UploadFilesController = async (req: Request, res: Response) => {
         }
 
         const currentDate = Date.now();
-        const folderPath = `${userId}/${folderId}/${currentDate}`;
+        const folderPath = `${userId}/${currentDate}`;
+        const uploadedFiles: string[] = [];
 
         await Promise.all(
             files.map(async (file) => {
@@ -65,13 +76,16 @@ const UploadFilesController = async (req: Request, res: Response) => {
 
                 await upload.done();
 
-                console.log(`Uploaded ${file.name} to S3 at ${s3Key}`);
+                const fileUrl = `https://${awsBucket}.s3.amazonaws.com/${s3Key}`;
+
+                console.log(`Uploaded ${file.name} to S3 at ${fileUrl}`);
+                uploadedFiles.push(fileUrl);
             })
         );
 
         res.json({
             message: "Files uploaded to S3 successfully.",
-            files,
+            files: uploadedFiles,
         });
     } catch (error) {
         console.error("Error uploading files to S3:", error);
