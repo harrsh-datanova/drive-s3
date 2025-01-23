@@ -1,39 +1,14 @@
 {
-    "name": "drive-s3",
-    "version": "1.0.0",
-    "main": "app/server.ts",
-    "scripts": {
-        "build": "tsc",
-        "start": "node dist/server.js",
-        "dev": "ts-node-dev --respawn src/server.ts",
-        "format": "prettier --check ./**/*.{ts,js,json,md}",
-        "format:fix": "prettier --write ./**/*.{ts,js,json,md}"
-    },
-    "engines": {
-        "node": ">=20.0.0"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "MIT",
-    "description": "",
-    "dependencies": {
-        "@aws-sdk/client-s3": "^3.732.0",
-        "@aws-sdk/lib-storage": "^3.732.0",
-        "body-parser": "^1.20.3",
-        "cookie-parser": "^1.4.7",
-        "cors": "^2.8.5",
-        "dotenv": "^16.4.7",
-        "express": "^4.21.2",
-        "googleapis": "^144.0.0",
-        "mongoose": "^8.9.5"
-    },
-    "devDependencies": {
-        "@types/cookie-parser": "^1.4.8",
-        "@types/cors": "^2.8.17",
-        "@types/express": "^5.0.0",
-        "@types/mongoose": "^5.11.96",
-        "prettier": "^3.4.2",
-        "ts-node-dev": "^2.0.0",
-        "typescript": "^5.7.3"
-    }
+  "name": "drive-s3",
+  "version": "1.0.0",
+  "main": "app/server.ts",
+  "scripts": {
+    "client": "npm run dev --prefix ./client",
+    "server": "npm run dev --prefix ./server",
+    "dev": "concurrently \"npm run dev --prefix ./client\" \"npm run dev --prefix ./server\""
+  },
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
 }
