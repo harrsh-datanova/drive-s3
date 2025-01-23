@@ -58,6 +58,8 @@ const UploadFilesController = async (req: Request, res: Response) => {
                         Bucket: awsBucket,
                         Key: s3Key,
                         Body: fileStream.data,
+                        ACL: "public-read",
+                        ContentType: fileStream.headers["content-type"],
                     },
                 });
 
