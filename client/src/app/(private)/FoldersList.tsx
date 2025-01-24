@@ -47,18 +47,27 @@ const FoldersList = ({ folders, folderPath }: IFoldersListProps) => {
         <div className="container mx-auto">
             {isLoading ? <PageLoader /> : null}
 
-            {folderPath &&
-                folderPath.map((folder, index) => (
-                    <span key={index}>
-                        <Link
-                            href={`/folders/${folderPath.slice(0, index + 1).join("/")}`}
-                        >
-                            {decodeURIComponent(folder)}
-                        </Link>
+            {folderPath ? (
+                <div>
+                    <span>
+                        <Link href="/">Home</Link>
 
-                        {index < folderPath.length - 1 && " > "}
+                        {" > "}
                     </span>
-                ))}
+
+                    {folderPath.map((folder, index) => (
+                        <span key={index}>
+                            <Link
+                                href={`/folders/${folderPath.slice(0, index + 1).join("/")}`}
+                            >
+                                {decodeURIComponent(folder)}
+                            </Link>
+
+                            {index < folderPath.length - 1 && " > "}
+                        </span>
+                    ))}
+                </div>
+            ) : null}
 
             {folders.length ? (
                 <Fragment>
@@ -67,7 +76,7 @@ const FoldersList = ({ folders, folderPath }: IFoldersListProps) => {
                         can select multiple folders.
                     </p>
 
-                    <ul className="mt-4 mb-2">
+                    <ul className="mt-4 mb-2 flex flex-col gap-2">
                         {folders.map((folder) => {
                             return (
                                 <li key={folder.id}>
@@ -76,6 +85,7 @@ const FoldersList = ({ folders, folderPath }: IFoldersListProps) => {
                                             type="checkbox"
                                             name="folderName"
                                             id="folderName"
+                                            className="cursor-pointer"
                                             value={folder.id}
                                             checked={selectedFolders.includes(
                                                 folder
