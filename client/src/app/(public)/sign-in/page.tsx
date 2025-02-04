@@ -7,8 +7,8 @@ import { useState } from "react";
 const SignUp = () => {
     const router = useRouter();
 
-    const [email, setEmail] = useState("harrsh@yopmail.com");
-    const [password, setPassword] = useState("1234");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleSignUp = async () => {
         try {
