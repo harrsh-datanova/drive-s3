@@ -1,22 +1,30 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { Credentials } from "google-auth-library";
 
 export interface IUser extends Document {
-    userId: string;
-    tokens: Credentials;
+    _id: string;
+    email: string;
+    password: string;
+    accessToken?: string;
+    refreshToken?: string;
     createdAt: Date;
 }
 
 const UserSchema: Schema = new Schema<IUser>(
     {
-        userId: {
+        email: {
             type: String,
             required: true,
             unique: true,
         },
-        tokens: {
-            type: Schema.Types.Mixed,
+        password: {
+            type: String,
             required: true,
+        },
+        accessToken: {
+            type: String,
+        },
+        refreshToken: {
+            type: String,
         },
     },
     {

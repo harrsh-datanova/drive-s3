@@ -25,7 +25,7 @@ const PrivateLayout = async ({ children }: { children: React.ReactNode }) => {
 
     if (!isAuth) {
         console.log("User is not authenticated");
-        redirect("/connect");
+        redirect("/sign-in");
     }
 
     return <Suspense fallback={<PageLoader />}>{children}</Suspense>;

@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { scopes } from "../env";
-import oauth2Client from "../libs/auth";
 
 const CheckAuthController = (req: Request, res: Response) => {
     try {

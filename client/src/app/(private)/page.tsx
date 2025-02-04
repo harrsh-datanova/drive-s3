@@ -1,25 +1,28 @@
+"use client";
+
 import axios from "@/utils/axios";
-import { cookies } from "next/headers";
-import FoldersList, { IFolder } from "./FoldersList";
 
-const HomePage = async () => {
-    let folders: IFolder[] = [];
+const HomePage = () => {
+    const handleConnectGoogleDrive = async () => {
+        try {
+            const response = await axios.get("/get-oauth-url");
+            console.log(response.data);
+            window.open(response.data.url);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-    try {
-        const cookieStore = await cookies();
-        const cookieHeader = cookieStore.toString();
-
-        const foldersResponse = await axios.get("/folders", {
-            headers: {
-                Cookie: cookieHeader,
-            },
-        });
-        folders = foldersResponse.data;
-    } catch (error) {
-        console.error(error);
-    }
-
-    return <FoldersList folders={folders} />;
+    return (
+        <div className="w-full  h-dvh flex items-center justify-center">
+            <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleConnectGoogleDrive}
+            >
+                Connect Google Drive
+            </button>
+        </div>
+    );
 };
 
 export default HomePage;
